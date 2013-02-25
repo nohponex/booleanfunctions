@@ -123,10 +123,7 @@ function parser(input) {
 				cvalue |= evaluate(input, TruthTableValues[i], variables);
 			} else if (c == '^') { //XOR 
 				var temp = evaluate(input, TruthTableValues[i], variables);
-				console.log(temp);
-				console.log(cvalue);
 				cvalue = (!cvalue && temp || cvalue && !temp );
-
 			} else if (c == '(') {
 				cvalue &= ( lastNot ? !evaluate(input, TruthTableValues[i], variables) : evaluate(input, TruthTableValues[i], variables));
 				if (lastNot)
@@ -181,8 +178,6 @@ function evaluate(input, variation, variables) {
 			cvalue |= evaluate(input, variation, variables);
 		} else if (c == '^') {//XOR
 			var temp = evaluate(input, variation, variables);
-			console.log(temp);
-			console.log(cvalue);
 			cvalue = (!cvalue && temp || cvalue && !temp );
 		} else if (c == '(') { //AND
 			cvalue &= ( lastNot ? !evaluate(input, variation, variables) : evaluate(input, variation, variables));
