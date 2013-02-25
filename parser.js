@@ -115,14 +115,23 @@ function parser(input) {
 		current = 0;
 		lastNot = false;
 		cvalue = true;
-		for ( ; ; ) {
+		for (; ; ) {
 			var c = input.charAt(current);
 			if (c == '!') {
 				lastNot = !lastNot;
 			} else if (c == '+') {
-				cvalue |= evaluate(input, TruthTableValues[i], variables);
-			} else if (c == '^') { //XOR 
 				var temp = evaluate(input, TruthTableValues[i], variables);
+				if (lastNot) {//NOR
+					temp = !temp;
+					lastNot = false;
+				}
+				cvalue |= temp;
+			} else if (c == '^') {//XOR
+				var temp = evaluate(input, TruthTableValues[i], variables);
+				if (lastNot) {//XNOR
+					temp = !temp;
+					lastNot = false;
+				}
 				cvalue = (!cvalue && temp || cvalue && !temp );
 			} else if (c == '(') {
 				cvalue &= ( lastNot ? !evaluate(input, TruthTableValues[i], variables) : evaluate(input, TruthTableValues[i], variables));
@@ -166,7 +175,7 @@ function parser(input) {
 function evaluate(input, variation, variables) {
 	var cvalue = true;
 	var lastNot = false;
-	for ( ; ; ) {
+	for (; ; ) {
 		current++;
 		if (current >= input.length) {
 			return cvalue;
@@ -175,17 +184,26 @@ function evaluate(input, variation, variables) {
 		if (c == '!') {
 			lastNot = !lastNot;
 		} else if (c == '+') {//OR
-			cvalue |= evaluate(input, variation, variables);
+			var temp = evaluate(input, variation, variables);
+			if (lastNot) {//NOR
+				temp = !temp;
+				lastNot = false;
+			}
+			cvalue |= temp;
 		} else if (c == '^') {//XOR
 			var temp = evaluate(input, variation, variables);
+			if (lastNot) {//XNOR
+				temp = !temp;
+				lastNot = false;
+			}
 			cvalue = (!cvalue && temp || cvalue && !temp );
-		} else if (c == '(') { //AND
+		} else if (c == '(') {//AND
 			cvalue &= ( lastNot ? !evaluate(input, variation, variables) : evaluate(input, variation, variables));
 			if (lastNot)
 				lastNot = false;
 		} else if (c == ')') {
 			return cvalue;
-		} else { //AND
+		} else {//AND
 			cvalue &= ( lastNot ? !variation[variableIndex(variables, c)] : variation[ variableIndex(variables, c)]);
 			if (lastNot)
 				lastNot = false;
