@@ -1,0 +1,24 @@
+<html>
+	<head>
+		<title>Booole Function Parser</title>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8;"/>
+		<meta name="description" content="Boolean algebra function parser" /> 
+		<meta name="author" content="NohponeX" /> 
+		
+		<script type="text/javascript" src="parser.js"></script> 
+	</head>
+	<body>
+		<div id="input_area">
+			<span>Enter logical function ( Use ! for Negation , + for logical OR ) :</span>
+			<input type="text" id="input_box" onkeyup="keyPressedEvt()" value="A+!(BC)"/>
+			<input type="button" value="Eval" onClick="eval();"/>
+		</div>
+		
+		<div id="results">
+		</div>
+		<div id="footer">
+			<p>Created by NohponeX (xenofons@auth.gr)</p>
+		</div>
+	</body>
+</html>
