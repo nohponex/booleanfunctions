@@ -120,12 +120,11 @@ function parser(input) {
 			if (c == '!') {
 				lastNot = !lastNot;
 			} else if (c == '+') {
-				var temp = evaluate(input, TruthTableValues[i], variables);
+				cvalue |= evaluate(input, TruthTableValues[i], variables);
 				if (lastNot) {//NOR
-					temp = !temp;
+					cvalue = !cvalue;
 					lastNot = false;
 				}
-				cvalue |= temp;
 			} else if (c == '^') {//XOR
 				var temp = evaluate(input, TruthTableValues[i], variables);
 				if (lastNot) {//XNOR
@@ -184,12 +183,11 @@ function evaluate(input, variation, variables) {
 		if (c == '!') {
 			lastNot = !lastNot;
 		} else if (c == '+') {//OR
-			var temp = evaluate(input, variation, variables);
+			cvalue |= evaluate(input, variation, variables);
 			if (lastNot) {//NOR
-				temp = !temp;
+				cvalue = !cvalue;
 				lastNot = false;
 			}
-			cvalue |= temp;
 		} else if (c == '^') {//XOR
 			var temp = evaluate(input, variation, variables);
 			if (lastNot) {//XNOR
