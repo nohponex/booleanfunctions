@@ -201,6 +201,8 @@ function evaluate(input, variation, variables) {
 				lastNot = false;
 		} else if (c == ')') {
 			current++;
+			if (lastNot)
+				lastNot = false;
 			return cvalue;
 		} else {//AND
 			cvalue &= ( lastNot ? !variation[variableIndex(variables, c)] : variation[ variableIndex(variables, c)]);
