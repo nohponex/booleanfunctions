@@ -7,29 +7,18 @@
 
 var current = 0;
 
-function keyPressedEvt() {
-	var e = window.event;
-	if (e.keyCode)
-		x = e.keyCode;
-	else if (e.which)
-		x = e.which;
-	if (x == 13) {//Enter key pressed
-		eval();
-	}
-}
-
-function eval() {
-	parser(document.getElementById("input_box").value);
-}
-
-Array.prototype.contains = function(element) {
-	for (var i = 0; i < this.length; i++) {
-		if (this[i] == element) {
-			return true;
+//Implement contains method if not exists
+if( !Array.prototype.contains ){
+	Array.prototype.contains = function(element) {
+		for (var i = 0; i < this.length; i++) {
+			if (this[i] == element) {
+				return true;
+			}
 		}
+		return false;
 	}
-	return false;
 }
+
 function trace(str) {
 	var result = document.getElementById("results");
 
@@ -59,19 +48,21 @@ function isValid(c) {
 	return false;
 }
 
-function parser(input) {
-	var result = document.getElementById("results");
+function parser(input, callback) {
 
 	//remove whitespaces
-	var input = input.replace(/\s+/g, "");
+	input = input.replace(/\s+/g, "");
 
 	//Input Validation
 
 	for (var i = 0; i < input.length; i++) {
 
 		if (!isValid(input.charAt(i))) {
-			result.innerHTML = "ERROR!\n ilegal character found at position " + i + "[" + input.charAt(i) + "]" + " !";
-
+			
+			//error
+			if( callback ){
+				callback( "ERROR!\n ilegal character found at position " + i + "[" + input.charAt(i) + "]" + " !" );
+			}
 			return;
 		}
 	}
@@ -149,26 +140,10 @@ function parser(input) {
 		}
 	}
 
-	var out = "";
-	//Output
-	out += "<table><tr>";
-	for (var i = 0; i < variables.length; i++) {
-		out += "<th>" + variables[i] + "</th>";
+	//Call callback
+	if( callback ){
+		callback( null, variables, variations, TruthTableValues, TruthTableResult );
 	}
-	out += "<th>&#402;</th></tr>";
-
-	for (var i = 0; i < variations; i++) {
-		var cclass = (i % 2 == 0 ? "lineA" : "lineB" );
-		out += "<tr class=\"" + cclass + "\">";
-		for (var v = 0; v < variables.length; v++) {
-			out += "<td>" + (TruthTableValues[i][v] == true ? 1 : 0 ) + "</td>";
-		}
-		out += "<td class=\"result\">" + TruthTableResult[i] + "</td></tr>";
-	}
-
-	out += "</table>";
-
-	result.innerHTML = out;
 }
 
 function evaluate(input, variation, variables) {
