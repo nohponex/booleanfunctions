@@ -10,15 +10,53 @@
 	</head>
 	<body>
 		<div id="input_area">
-			<span>Enter logical function ( Use ! for Negation , + for logical OR, ^ FOR XOR ) :</span>
-			<input type="text" id="input_box" onkeyup="keyPressedEvt()" value="A+!(BC)"/>
+			<span>Enter logical function ( Use ! for Negation , + for logical OR, ^ FOR XOR ) :</span><br/>
+			&#402;=<input type="text" id="input_box" onkeyup="keyPressedEvt(event)" value="A+!(BC)"/>
 			<input type="button" value="Eval" onClick="eval();"/>
 		</div>
 		
 		<div id="results">
 		</div>
 		<div id="footer">
-			<p>Created by NohponeX (xenofons@auth.gr)</p>
+			<p><a href="https://github.com/NohponeX/booleanfunctions">Created by NohponeX</a></p>
 		</div>
+		<script type="text/javascript">
+			function keyPressedEvt( e ) {
+				if (e.keyCode)
+					x = e.keyCode;
+				else if (e.which)
+					x = e.which;
+				if (x == 13) {//Enter key pressed
+					eval();
+				}
+			}
+			function eval(){
+				parser(document.getElementById("input_box").value, eval_callback);
+			}
+			function eval_callback( err, variables, variations, TruthTableValues, TruthTableResult ){
+				var result = document.getElementById("results");
+
+				var out = "";
+				//Output
+				out += "<table><tr>";
+				for (var i = 0; i < variables.length; i++) {
+					out += "<th>" + variables[i] + "</th>";
+				}
+				out += "<th>&#402;</th></tr>";
+
+				for (var i = 0; i < variations; i++) {
+					var cclass = (i % 2 == 0 ? "lineA" : "lineB" );
+					out += "<tr class=\"" + cclass + "\">";
+					for (var v = 0; v < variables.length; v++) {
+						out += "<td>" + (TruthTableValues[i][v] == true ? 1 : 0 ) + "</td>";
+					}
+					out += "<td class=\"result\">" + TruthTableResult[i] + "</td></tr>";
+				}
+
+				out += "</table>";
+
+				result.innerHTML = out;
+			}
+		</script>
 	</body>
 </html>
